@@ -1,13 +1,12 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      def get_users
-        users = User.all
-        render json: users
+      def index
+        @users = User.all
       end
 
-      def add_user
-        user = User.new(username: params[:username], email: params[:email], password_digest: params[:password_digest])
+      def create
+        user = User.new(user_params)
         if user.save
           render json: user, status => 201
         else
@@ -15,9 +14,30 @@ module Api
         end
       end
 
-      # def user_params
-      #  params.require(:user).permit(:username, :email, :password_digest)
-      # end
+      # Put
+      def update
+        if @user
+          render json: @user, status => 200
+        else
+          render json: @user.errors, status => 422
+        end
+      end
+
+      # Delete
+      def delete
+        @user.destroy
+        render json: { message: 'User deleted' }, status => 200
+      end
+
+      private
+
+      def user_params
+        params.permit(:username, :email, :password_digest)
+      end
+
+      def user
+        @user = User.find(params[:id])
+      end
     end
   end
 end
