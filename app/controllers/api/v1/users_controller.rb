@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class UsersController < ApplicationController
@@ -42,7 +44,7 @@ module Api
       private
 
       def user_params
-        params.permit(:username, :email, :password_digest)
+        params.permit(:name, :email, :password_digest)
       end
 
       def user
